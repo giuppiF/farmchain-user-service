@@ -29,7 +29,7 @@ const storageService = (options) => {
       return true
 
     } catch (err) {
-      throw  Error(err)
+      //throw  Error(err)
     }
   }
 
@@ -40,7 +40,7 @@ const storageService = (options) => {
       return true
 
     } catch (err) {
-      throw  Error(err)
+      //throw  Error(err)
     }
   }
 
