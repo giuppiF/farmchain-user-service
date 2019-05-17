@@ -19,6 +19,9 @@ const farmServiceSettings = {
     port: process.env.FARM_SERVER_PORT
 }
 
+const authSettings = {
+    JWTSecret: process.env.JWT_SECRET
+}
 
 
-module.exports = Object.assign({}, { dbSettings, serverSettings, uploadServiceSettings, farmServiceSettings})
+module.exports = Object.assign({}, { dbSettings, serverSettings, uploadServiceSettings, farmServiceSettings, authSettings})

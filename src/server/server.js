@@ -24,6 +24,10 @@ const start  = (options) => {
             uploadDir: options.storagePath,
             autoClean: true
         }));
+
+        //app.use(session({ secret: 'passport-farmchain', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
+
+
         app.use((err,req,res,next) => {
             reject(new Error('Something went wrong!, err:' + err))
             res.status(500).send('Something went wrong!')

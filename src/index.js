@@ -20,12 +20,15 @@ mediator.on('db.ready', async (db) => {
         port: config.farmServiceSettings.port
     })
 
+    var auth = await config.authConfig.start(config.authSettings.JWTSecret)
+
     var app = await server.start({
         port:  config.serverSettings.port,
         repo: repo,
         storagePath: config.uploadServiceSettings.path,
         storageService: storageService,
-        farmService: farmService
+        farmService: farmService,
+        auth: auth
     })
 
     

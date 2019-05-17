@@ -1,6 +1,6 @@
 'use strict'
 const User = require('../models/user.model')
-
+require('../config/passport');
 const repository = () => {
     
   const getAllUsers = async () => {
