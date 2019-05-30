@@ -5,6 +5,59 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const  {authSettings} = require('../config')
 var SALT_WORK_FACTOR = 10;
+ /**
+   * @swagger
+   * components:
+   *  schemas:
+   *   User:
+   *     properties:
+   *       name:
+   *         name: name
+   *         description: User name
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       address:
+   *         name: address
+   *         description: User address
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       mail:
+   *         name: mail
+   *         description: User mail
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       phone:
+   *         name: phone
+   *         description: User phone
+   *         in: formData
+   *         required: true
+   *         type: string
+   *       photo:
+   *         name: photo
+   *         description: User photo
+   *         in: formData
+   *         required: true
+   *         type: string
+   *         format: binary
+   *       password:
+   *         name: password
+   *         description: User password
+   *         in: formData
+   *         required: true
+   *         type: string
+   *         format: password
+   *       farm:
+   *         name: farm
+   *         description: User farm id
+   *         in: formData
+   *         required: true
+   *         type: string
+   *         example: 2312312323
+   *            
+   */
 
 var joiUserSchema = Joi.object().keys({
     name: Joi.string().required(),

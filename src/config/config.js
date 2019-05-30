@@ -23,5 +23,21 @@ const authSettings = {
     JWTSecret: process.env.JWT_SECRET
 }
 
+const host = 'http://user:' + serverSettings.port
+const swaggerOptions = {
+    swaggerDefinition: {
+      openapi: '3.0.0',
+      components: {},
+      info: {
+        title: 'User service API',
+        version: '1.0.0',
+        description: 'Microservice USER api documentation',
+      },
+    },
+    host: host,
+    basePath: '/user',
+    // List of files to be processes. You can also set globs './routes/*.js'
+    apis: ['src/**/*.js'],
+  };
 
-module.exports = Object.assign({}, { dbSettings, serverSettings, uploadServiceSettings, farmServiceSettings, authSettings})
+module.exports = Object.assign({}, { dbSettings, serverSettings, uploadServiceSettings, farmServiceSettings, authSettings,swaggerOptions})

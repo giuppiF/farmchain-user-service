@@ -5,6 +5,10 @@ const bodyParser = require('body-parser');
 const formData = require("express-form-data");
 const cors = require("cors")
 
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+
 const start  = (options) => {
     return new Promise((resolve,reject) =>{
         if(!options.repo){
@@ -14,6 +18,15 @@ const start  = (options) => {
             reject(new Error('Non è disponibile nessuna porta'))
         }
         const app = express()
+
+        
+        // Swagger API docs implementation
+        const swaggerSpec = swaggerJsdoc(options.swaggerOptions);
+        app.use('/user/api-docs.json', (req,res)=>{
+            res.send(swaggerSpec)
+        });
+        app.use('/user/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
         // morgan gestisce il logging sul web server (formati dev, short ... )
         app.use(morgan('dev'))

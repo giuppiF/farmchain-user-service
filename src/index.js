@@ -28,7 +28,8 @@ mediator.on('db.ready', async (db) => {
         storagePath: config.uploadServiceSettings.path,
         storageService: storageService,
         farmService: farmService,
-        auth: auth
+        auth: auth,
+        swaggerOptions: config.swaggerOptions
     })
 
     
