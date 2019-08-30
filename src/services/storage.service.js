@@ -1,67 +1,79 @@
 
 const fs = require('fs')
-var mkdirp = require('mkdirp');
 var path = require('path');
+var mime = require('mime')
+const AWS = require('aws-sdk');
 
 const storageService = (options) => {
 
-  const saveToDir =  async (rawfile, filename, pathname) => {
+  const uploadFileInS3 = (rawfile, filename, pathname) =>  {
+    return new Promise(function (resolve, reject) {
+      try{ 
+        //configuring the AWS environment
+        s3 = new AWS.S3();
+        params = {
+          Bucket: options.awsSettings.s3BucketName,
+          Body: fs.createReadStream(rawfile),
+          Key:  path.join(pathname.replace(/^\/+/g, ''),filename),
+          ContentType: mime.getType(rawfile),
+          ACL: 'public-read'
+        }
+        s3.upload(params, function (err, data) {
+          //handle error
+          if (err) {
+            reject(err)
+          }
+          //success
+          if (data) {
+              console.log("Uploaded in:", data.Location);
+              resolve(data.Location)
 
-    try{
-      if (!fs.existsSync(pathname)) {
-        await mkdirp.sync(pathname)
+          }
+        });
+      } catch (err) {
+        throw  Error(err)
       }
-      var file = path.join(pathname,filename)
-      await moveFile(rawfile,file )
+    });
+  }
+  
+  const deleteFileFromS3 = ( filename) =>  {
+    return new Promise(function (resolve, reject) {
+      try{ 
+        //configuring the AWS environment
+        s3 = new AWS.S3();
+       
+        params = {
+          Bucket: options.awsSettings.s3BucketName,
+          Key:  filename.replace(/^\/+/g, '')
+        }
+        s3.deleteObject(params, function(err, data) {
+          if (err){
+            reject(err);  // error
+          } 
+          else
+          {
+            resolve()                // deleted
+          }     
+        });
+
       
-      return file
 
-    } catch (err) {
-      throw  Error(err)
-    }
+      } catch (err) {
+        throw  Error(err)
+      }
+    });
   }
 
-  const deleteFile =  async (filename, pathname) => {
-
-    try{
-      var file = path.join(pathname,filename)
-      await fs.unlinkSync(file)
-      return true
-
-    } catch (err) {
-      //throw  Error(err)
-    }
-  }
-
-  const deleteDir =  async (pathname) => {
-
-    try{
-      await fs.rmdirSync(pathname);
-      return true
-
-    } catch (err) {
-      //throw  Error(err)
-    }
-  }
 
 
 
   return Object.create({
-	saveToDir,
-  deleteFile,
-  deleteDir
+    uploadFileInS3,
+    deleteFileFromS3
   })
 }
 
-function moveFile(imagePath,saveTo) {
-  return new Promise(function (resolve, reject) {
-      fs.rename(imagePath, saveTo, async  (err)=>{
-          if(err) reject(err)
-          else
-          resolve()
-      })
-  });
-}
+
 
 const start = (options) => {
   return new Promise((resolve, reject) => {

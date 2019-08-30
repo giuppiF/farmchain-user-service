@@ -12,7 +12,8 @@ mediator.on('db.ready', async (db) => {
     var repo = await repository.connect(db);
 
     var storageService = await services.storageService.start({
-        path: config.uploadServiceSettings.path
+        awsSettings: config.awsSettings
+
     })
 
     var farmService = await services.farmService.start({

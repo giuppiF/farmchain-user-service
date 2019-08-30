@@ -103,8 +103,7 @@ module.exports = (options) => {
     
                 var filename = Date.now()+ '-' + photo.originalFilename
                 var pathname = path.join( req.originalUrl, userCreated._id.toString())
-                var completePath = path.join(storagePath,pathname)
-                var uploadfile = await storageService.saveToDir(photo.path, filename, completePath )
+                var uploadfile = await storageService.uploadFileInS3(photo.path, filename, pathname )
                 userCreated.photo = path.join(pathname, filename)
                 userCreated.save()
             }
@@ -384,15 +383,14 @@ module.exports = (options) => {
             if(req.files.photo){
 
                 var pathname = req.originalUrl
-                var completePathname = path.join(storagePath, pathname)
                 var user = await repo.getUser(req.params.userID)
                 if(user.photo)
-                    var deleteFile = await storageService.deleteFile(user.photo,storagePath)            
+                    var deleteFile = await storageService.deleteFileFromS3(user.photo)            
 
                 var photo = req.files.photo    
                 var filename = Date.now()+ '-' + photo.originalFilename
                 
-                var uploadfile = await storageService.saveToDir(photo.path, filename, completePathname )
+                var uploadfile = await storageService.uploadFileInS3(photo.path, filename, pathname )
                 userData.photo = path.join(pathname,filename)
                 
 
@@ -445,11 +443,9 @@ module.exports = (options) => {
     router.delete('/:userID', async (req,res) => {
         try{
 
-            var pathname = path.join(storagePath, req.originalUrl)
             var user = await repo.getUser(req.params.userID)
             if(user.photo)
-                var deleteFile = await storageService.deleteFile(user.photo,storagePath)  
-                var deleteDir = await storageService.deleteDir(pathname)  
+                var deleteFile = await storageService.deleteFileFromS3(user.photo)  
 
             user = await repo.deleteUser(req.params.userID)
             user ?

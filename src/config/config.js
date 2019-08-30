@@ -40,4 +40,8 @@ const swaggerOptions = {
     apis: ['src/**/*.js'],
   };
 
-module.exports = Object.assign({}, { dbSettings, serverSettings, uploadServiceSettings, farmServiceSettings, authSettings,swaggerOptions})
+const awsSettings = {
+  s3BucketName:  process.env.AWS_S3_BUCKET_NAME,
+}
+
+module.exports = Object.assign({}, { dbSettings, serverSettings, uploadServiceSettings, farmServiceSettings, authSettings,swaggerOptions,awsSettings})

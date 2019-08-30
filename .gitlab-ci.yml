@@ -1,0 +1,29 @@
+stages:
+ - build
+ - deploy
+#=========
+# Build
+#=========
+build:
+  stage: build
+  image: backstreetacademy/docker-aws
+  only:
+    refs:
+      - master
+  services: 
+    - docker:dind
+  script: 
+    - chmod +x ./build.sh
+    - ./build.sh
+#=========
+# Deploy
+#=========
+#deploy:
+#  stage: deploy
+#  image: backstreetacademy/docker-aws
+#  only:
+#    refs:
+#      - master
+#  script: 
+#    - chmod +x ./deploy.sh
+#    - ./deploy.sh
