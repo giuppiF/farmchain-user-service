@@ -18,12 +18,12 @@ build:
 #=========
 # Deploy
 #=========
-#deploy:
-#  stage: deploy
-#  image: backstreetacademy/docker-aws
-#  only:
-#    refs:
-#      - master
-#  script: 
-#    - chmod +x ./deploy.sh
-#    - ./deploy.sh
+deploy:
+  stage: deploy
+  image: backstreetacademy/docker-aws
+  only:
+    refs:
+      - master
+  script: 
+    - chmod +x ./deploy.sh
+    - ./deploy.sh
