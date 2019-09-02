@@ -80,7 +80,7 @@ mongooseUserSchema.pre('save', async function(next) {
     if(user.isModified('mail')){
         let userMail = await User.find({mail : user.mail}, function (err, docs) {
             if (docs.length){
-                console.log('user exists: ',self.username);
+                console.log('user exists: ',user.mail);
                 next(new Error("User exists!"));
             }
         });
