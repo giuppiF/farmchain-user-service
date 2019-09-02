@@ -71,11 +71,21 @@ var joiUserSchema = Joi.object().keys({
 
 var mongooseUserSchema = new Mongoose.Schema(Joigoose.convert(joiUserSchema));
 
-mongooseUserSchema.pre('save', function(next) {
+mongooseUserSchema.pre('save', async function(next) {
     var user = this;
 
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
+
+    if(user.isModified('mail')){
+        let userMail = await User.find({mail : user.mail}, function (err, docs) {
+            if (docs.length){
+                console.log('user exists: ',self.username);
+                next(new Error("User exists!"));
+            }
+        });
+    }
+
 
     // generate a salt
     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
