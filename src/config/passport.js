@@ -10,11 +10,9 @@ passport.use(new LocalStrategy({
 }, (mail, password, done) => {
   Users.findOne({ mail })
     .then(async (user) => {
-        var comparedPassword = await user.comparePassword(password)
-      if(!user || !comparedPassword ) {
-        return done(null, false, { errors: { 'email or password': 'is invalid' } });
-      }
-
+      if(!user) return done(null, false, { errors: { 'email ': 'is invalid' } });
+      var comparedPassword = await user.comparePassword(password)
+      if(!comparedPassword ) return done(null, false, { errors: { 'password': 'is invalid' } });
       return done(null, user);
     }).catch(done);
 }));
