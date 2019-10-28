@@ -128,6 +128,7 @@ mongooseUserSchema.methods.toAuthJSON = function() {
     return {
         _id: this._id,
         mail: this.mail,
+        test: "giuppi",
         token: this.generateJWT(),
     };
 };
