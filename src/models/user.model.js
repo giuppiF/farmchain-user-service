@@ -102,6 +102,8 @@ mongooseUserSchema.pre('save', async function(next) {
         if (docs.length){
             console.log('user exists: ',user.mail);
             next(new Error("User exists!"));
+        }else{
+            next();
         }
     });
 });
