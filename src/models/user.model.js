@@ -71,8 +71,9 @@ var joiUserSchema = Joi.object().keys({
 
 var mongooseUserSchema = new Mongoose.Schema(Joigoose.convert(joiUserSchema));
 
-mongooseUserSchema.pre('save', async function(next) {
+mongooseUserSchema.pre('save', function(next) {
     var user = this;
+
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
 
@@ -89,19 +90,6 @@ mongooseUserSchema.pre('save', async function(next) {
             next();
         });
     });
-
-
-   /* if(user.isModified('mail')){
-        let userMail = await User.find({mail : user.mail}, function (err, docs) {
-            if (docs.length){
-                console.log('user exists: ',user.mail);
-                next(new Error("User exists!"));
-            }
-        });
-    }*/
-
-
-
 });
 
 
@@ -128,9 +116,9 @@ mongooseUserSchema.methods.toAuthJSON = function() {
     return {
         _id: this._id,
         mail: this.mail,
-        test: "giuppi",
         token: this.generateJWT(),
     };
 };
+
 
 module.exports = Mongoose.model('User', mongooseUserSchema);
