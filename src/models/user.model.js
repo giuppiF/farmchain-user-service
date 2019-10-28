@@ -75,17 +75,7 @@ mongooseUserSchema.pre('save', async function(next) {
     var user = this;
 
     // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) return next();
-
-    if(user.isModified('mail')){
-        let userMail = await User.find({mail : user.mail}, function (err, docs) {
-            if (docs.length){
-                console.log('user exists: ',user.mail);
-                next(new Error("User exists!"));
-            }
-        });
-    }
-
+    if (!user.isModified('password'))  return next();
 
     // generate a salt
     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
@@ -100,8 +90,21 @@ mongooseUserSchema.pre('save', async function(next) {
             next();
         });
     });
+
 });
 
+mongooseUserSchema.pre('save', async function(next) {
+    var user = this;
+
+    
+    if(!user.isModified('mail')) return next();
+    let userMail = await User.find({mail : user.mail}, function (err, docs) {
+        if (docs.length){
+            console.log('user exists: ',user.mail);
+            next(new Error("User exists!"));
+        }
+    });
+});
 
 mongooseUserSchema.methods.comparePassword = async function(candidatePassword) {
     
