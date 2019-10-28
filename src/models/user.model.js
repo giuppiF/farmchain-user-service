@@ -132,5 +132,5 @@ mongooseUserSchema.methods.toAuthJSON = function() {
     };
 };
 
-
-module.exports = Mongoose.model('User', mongooseUserSchema);
+const User = Mongoose.model('User', mongooseUserSchema);
+module.exports = User;
